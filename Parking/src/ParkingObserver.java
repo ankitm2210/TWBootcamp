@@ -2,7 +2,7 @@
  * Created by ankitmishra on 02/12/15.
  */
 public interface ParkingObserver {
-    void notifyParkingFull();
+    void notifyParkingFull(ParkingLot parkingLot);
 
-    void notifyParkingHasSpace();
+    void notifyParkingHasSpace(ParkingLot parkingLot);
 }

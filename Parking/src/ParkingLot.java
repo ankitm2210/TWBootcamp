@@ -9,12 +9,35 @@ import java.util.Map;
 public class ParkingLot{
 
     private final int capacity;
+    private  double cost;
+    private  double distance;
     private List<ParkingObserver> parkingObservers;
 
     private Map<ParkingToken, Car> parkingSpaces = new HashMap<ParkingToken, Car>();
 
     public ParkingLot(int capacity) {
         this.capacity = capacity;
+        parkingObservers = new ArrayList<ParkingObserver>();
+    }
+
+    public double getDistance() {
+        return distance;
+    }
+
+    public double getCost() {
+        return cost;
+    }
+
+    public ParkingLot(int capacity, double distance) {
+        this.capacity = capacity;
+        this.distance = distance;
+        parkingObservers = new ArrayList<ParkingObserver>();
+    }
+
+    public ParkingLot(int capacity, double distance, double cost) {
+        this.capacity = capacity;
+        this.distance = distance;
+        this.cost = cost;
         parkingObservers = new ArrayList<ParkingObserver>();
     }
 
@@ -43,7 +66,7 @@ public class ParkingLot{
             parkingSpaces.put(token, car);
             if (isFull()) {
                 for (ParkingObserver observer : parkingObservers) {
-                    observer.notifyParkingFull();
+                    observer.notifyParkingFull(this);
                 }
             }
 
@@ -62,7 +85,7 @@ public class ParkingLot{
         if(isFull())
         {
             for (ParkingObserver observer : parkingObservers) {
-                observer.notifyParkingHasSpace();
+                observer.notifyParkingHasSpace(this);
             }
         }
 
@@ -73,4 +96,9 @@ public class ParkingLot{
     public boolean isFull() {
         return !this.IsParkingAvailable();
     }
+
+    public int getAvailableSlots() {
+        return this.capacity-this.parkingSpaces.size();
+    }
+
 }
