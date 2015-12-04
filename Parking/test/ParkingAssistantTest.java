@@ -99,9 +99,9 @@ public class ParkingAssistantTest {
 
     @Test
     public void ParkingAssistantShouldBeAbleToParkInParkingComplex() throws Exception {
-        ParkingLot pl1 = new ParkingLot(2, 1.0, 10.0);
+        ParkingLot parkingLotInComplex = new ParkingLot(2);
         List<ParkingAreaBase> plots = new ArrayList<ParkingAreaBase>();
-        plots.add(pl1);
+        plots.add(parkingLotInComplex);
         ParkingComplex complex = new ParkingComplex(plots, 10, 10);
 
         List<ParkingAreaBase> parkingComplexes = new ArrayList<>();
@@ -109,15 +109,15 @@ public class ParkingAssistantTest {
         ParkingAssistant assistant = new ParkingAssistant(parkingComplexes);
         Car car = new Car("car1");
         ParkingToken token = assistant.parkCar(car);
-        Assert.assertEquals(car, pl1.unparkCar(token));
+        Assert.assertEquals(car, parkingLotInComplex.unparkCar(token));
     }
 
 
     @Test
     public void ParkingAssistantShouldBeAbleToParkInIndividualParking() throws Exception {
-        ParkingLot pl1 = new ParkingLot(2, 1.0, 10.0);
+        ParkingLot parkingLotInComplex = new ParkingLot(2);
         List<ParkingAreaBase> plotsInComplex = new ArrayList<ParkingAreaBase>();
-        plotsInComplex.add(pl1);
+        plotsInComplex.add(parkingLotInComplex);
         ParkingComplex complex = new ParkingComplex(plotsInComplex, 10, 10);
 
 
@@ -135,9 +135,9 @@ public class ParkingAssistantTest {
 
     @Test
     public void ParkingComplexShouldBeAbleToUnparkAParkedCar() throws Exception {
-        ParkingLot pl1 = new ParkingLot(2, 1.0, 10.0);
+        ParkingLot parkingLotInComplex = new ParkingLot(2);
         List<ParkingAreaBase> plots = new ArrayList<ParkingAreaBase>();
-        plots.add(pl1);
+        plots.add(parkingLotInComplex);
         ParkingComplex complex = new ParkingComplex(plots, 10, 10);
 
         List<ParkingAreaBase> parkingComplexes = new ArrayList<>();
