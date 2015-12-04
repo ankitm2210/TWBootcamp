@@ -4,13 +4,13 @@ import java.util.List;
  * Created by ankitmishra on 03/12/15.
  */
 public class ParkingLotOwner {
-    List<ParkingLot>  parkingLots;
+    List<ParkingAreaBase> parkingLots;
 
-    public ParkingLotOwner(List<ParkingLot> parkingLots) {
+    public ParkingLotOwner(List<ParkingAreaBase> parkingLots) {
         this.parkingLots = parkingLots;
     }
 
-    public List<ParkingLot> getParkingLots() {
+    public List<ParkingAreaBase> getParkingLots() {
         return parkingLots;
     }
 }

@@ -4,22 +4,42 @@ import java.util.*;
  * Created by ankitmishra on 03/12/15.
  */
 public class ParkingAssistant implements ParkingObserver{
-    List<ParkingLot> parkingLots;
-    List<ParkingLot> availableParkingLots;
-    Map<ParkingToken, ParkingLot> tokenLotMap;
+    private List<ParkingComplex> complexes;
+    List<ParkingAreaBase> parkingLots;
+    List<ParkingAreaBase> availableParkingLots;
+    Map<ParkingToken, ParkingAreaBase> tokenLotMap;
+
 
     public ParkingAssistant()
     {
         parkingLots = new ArrayList<>();
-        tokenLotMap = new HashMap<ParkingToken, ParkingLot>();
+        tokenLotMap = new HashMap<ParkingToken, ParkingAreaBase>();
     }
 
-    public ParkingAssistant(List<ParkingLot> parkingLots) {
+    public ParkingAssistant(List<ParkingAreaBase> parkingLots) {
         this.parkingLots=parkingLots;
-        this.availableParkingLots = new ArrayList<>();
+        this.availableParkingLots = new ArrayList<ParkingAreaBase>();
         this.availableParkingLots.addAll(parkingLots);
-        tokenLotMap = new HashMap<ParkingToken, ParkingLot>();
+        tokenLotMap = new HashMap<ParkingToken, ParkingAreaBase>();
     }
+
+   /* public ParkingAssistant(List<ParkingAreaBase>) {
+        this.complexes = parkingComplexes;
+        this.parkingLots = new ArrayList<ParkingLot>();
+        this.availableParkingLots = new ArrayList<>();
+
+        for (ParkingComplex complex : parkingComplexes) {
+            this.parkingLots.addAll(complex.getParkingLots());
+            this.availableParkingLots.addAll(complex.getParkingLots());
+        }
+
+        if(indiviDualParkingLots!=null && indiviDualParkingLots.size()!=0) {
+            this.parkingLots.addAll(indiviDualParkingLots);
+            this.availableParkingLots.addAll(indiviDualParkingLots);
+        }
+
+    }*/
+
 
     public boolean add(ParkingLot pl2) {
         if(this.parkingLots.contains(pl2))
@@ -32,8 +52,8 @@ public class ParkingAssistant implements ParkingObserver{
     }
 
     public ParkingToken parkCar(Car car1) throws ParkingLotFullException {
-        ParkingLot maxSapceParking = new ParkLotWithMaxSpaceStrategy().getParklotStrategy(this.availableParkingLots);
-        if(maxSapceParking.getAvailableSlots() == 0)
+        ParkingAreaBase maxSapceParking = new ParkLotWithMaxSpaceStrategy().getParklotStrategy(this.availableParkingLots);
+        if (maxSapceParking.getAvailableSpaces() == 0)
         {
             throw new ParkingLotFullException();
         }
@@ -59,7 +79,7 @@ public class ParkingAssistant implements ParkingObserver{
             throw new ParkingLotFullException();
         }
 
-        ParkingLot parkingLot = parkingStrategy.getParklotStrategy(this.availableParkingLots);
+        ParkingAreaBase parkingLot = parkingStrategy.getParklotStrategy(this.availableParkingLots);
         ParkingToken token = parkingLot.parkCar(car);
         tokenLotMap.put(token,parkingLot);
         return token;

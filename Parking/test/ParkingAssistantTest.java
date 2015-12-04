@@ -28,14 +28,14 @@ public class ParkingAssistantTest {
         ParkingLot pl1= new ParkingLot(5, 2.0);
         ParkingLot pl2= new ParkingLot(6, 2.0);
 
-        List<ParkingLot> plots=new ArrayList<ParkingLot>();
+        List<ParkingAreaBase> plots = new ArrayList<ParkingAreaBase>();
         plots.add(pl1);
         plots.add(pl2);
         Car car1 = new Car("car1");
         ParkingLotOwner owner = new ParkingLotOwner(plots);
         ParkingAssistant assistant = new ParkingAssistant(owner.getParkingLots());
         ParkingToken token = assistant.parkCar(car1);
-        Assert.assertEquals(5,pl2.getAvailableSlots());
+        Assert.assertEquals(5, pl2.getAvailableSpaces());
         Assert.assertTrue(pl2.isCarAlreadyParked(car1));
     }
 
@@ -45,7 +45,7 @@ public class ParkingAssistantTest {
         ParkingLot pl2 = new ParkingLot(3, 2.0);
         ParkingLot pl3 = new ParkingLot(1, 1.5);
 
-        List<ParkingLot> plots = new ArrayList<ParkingLot>();
+        List<ParkingAreaBase> plots = new ArrayList<ParkingAreaBase>();
         plots.add(pl1);
         plots.add(pl2);
         plots.add(pl3);
@@ -67,7 +67,7 @@ public class ParkingAssistantTest {
         ParkingLot pl2 = new ParkingLot(3, 2.0, 15.0);
         ParkingLot pl3 = new ParkingLot(1, 1.5, 20.0);
 
-        List<ParkingLot> plots = new ArrayList<ParkingLot>();
+        List<ParkingAreaBase> plots = new ArrayList<ParkingAreaBase>();
         plots.add(pl1);
         plots.add(pl2);
         plots.add(pl3);
@@ -87,7 +87,7 @@ public class ParkingAssistantTest {
     @Test
     public void ParkingAssistantShouldBeAbleToUnpark() throws Exception {
         ParkingLot pl1 = new ParkingLot(2, 1.0,10.0);
-        List<ParkingLot> plots = new ArrayList<ParkingLot>();
+        List<ParkingAreaBase> plots = new ArrayList<ParkingAreaBase>();
         plots.add(pl1);
         ParkingLotOwner owner = new ParkingLotOwner(plots);
         ParkingAssistant assistant = new ParkingAssistant(owner.getParkingLots());
@@ -95,5 +95,56 @@ public class ParkingAssistantTest {
         Car car = new Car("car1");
         ParkingToken token = assistant.parkCar(car);
         Assert.assertEquals(car,assistant.unParkCar(token));
+    }
+
+    @Test
+    public void ParkingAssistantShouldBeAbleToParkInParkingComplex() throws Exception {
+        ParkingLot pl1 = new ParkingLot(2, 1.0, 10.0);
+        List<ParkingAreaBase> plots = new ArrayList<ParkingAreaBase>();
+        plots.add(pl1);
+        ParkingComplex complex = new ParkingComplex(plots, 10, 10);
+
+        List<ParkingAreaBase> parkingComplexes = new ArrayList<>();
+        parkingComplexes.add(complex);
+        ParkingAssistant assistant = new ParkingAssistant(parkingComplexes);
+        Car car = new Car("car1");
+        ParkingToken token = assistant.parkCar(car);
+        Assert.assertEquals(car, pl1.unparkCar(token));
+    }
+
+
+    @Test
+    public void ParkingAssistantShouldBeAbleToParkInIndividualParking() throws Exception {
+        ParkingLot pl1 = new ParkingLot(2, 1.0, 10.0);
+        List<ParkingAreaBase> plotsInComplex = new ArrayList<ParkingAreaBase>();
+        plotsInComplex.add(pl1);
+        ParkingComplex complex = new ParkingComplex(plotsInComplex, 10, 10);
+
+
+        ParkingAreaBase individualParkingLot = new ParkingLot(10, 1.0, 10.0);
+
+        List<ParkingAreaBase> parkingAreas = new ArrayList<ParkingAreaBase>();
+        parkingAreas.add(individualParkingLot);
+        parkingAreas.add(complex);
+
+        ParkingAssistant assistant = new ParkingAssistant(parkingAreas);
+        Car car = new Car("car1");
+        ParkingToken token = assistant.parkCar(car);
+        Assert.assertEquals(car, individualParkingLot.unparkCar(token));
+    }
+
+    @Test
+    public void ParkingComplexShouldBeAbleToUnparkAParkedCar() throws Exception {
+        ParkingLot pl1 = new ParkingLot(2, 1.0, 10.0);
+        List<ParkingAreaBase> plots = new ArrayList<ParkingAreaBase>();
+        plots.add(pl1);
+        ParkingComplex complex = new ParkingComplex(plots, 10, 10);
+
+        List<ParkingAreaBase> parkingComplexes = new ArrayList<>();
+        parkingComplexes.add(complex);
+        ParkingAssistant assistant = new ParkingAssistant(parkingComplexes);
+        Car car = new Car("car1");
+        ParkingToken token = assistant.parkCar(car);
+        Assert.assertEquals(car, complex.unparkCar(token));
     }
 }
